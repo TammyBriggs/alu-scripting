@@ -1,27 +1,31 @@
 #!/usr/bin/python3
-"""
-Contains the number_of_subscribers function
-"""
-
+"""API for finding number of subscribers in sub-reddit in total"""
 import requests
 
 
-def number_of_subscribers(subreddit):
-    """
-    Returns the number of subscribers for a given subreddit.
+def num_of_subs(subreddits):
+    """goes through reddit API to find subs in given subreddit"""
 
-    Args:
-        subreddit (str): The name of the subreddit.
+    url = "https://reddit.com/r/{}/hot.json".format(subreddits)
+    headers = {
+        "User-Agent": "linux:alu-scripting:v1.0.0 (SIPHO WAS HERE MAN)"
+    }
 
-    Returns:
-        int: The number of subscribers for the given subreddit, or 0 if the subreddit is None or not a string.
-    """
-    if subreddit is None or not isinstance(subreddit, str):
+    # If given subreddit isnt real
+    if subreddits is None or not isinstance(subreddits, str):
         return 0
-    r = requests.get(
-        'http://www.reddit.com/r/{}/about.json'.format(subreddit),
-        headers={
-            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-            "(KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"}).json()
-    subs = r.get("data", {}).get("subscribers", 0)
-    return subs
+
+    try:
+        # var for not allowing API redirections...cause reddit does that
+        response = requests.get(url, headers=headers, redirects=False)
+        if response.status_code == 200:
+            data = response.json()
+            return data.get("data", {}).get("subscribers", 0)
+        else:
+            return 0
+
+    # Error handling for any exceptions that can occur from request
+    except requests.RequestException:
+        return 0
+    except ValueError:
+        return 0
