@@ -1,21 +1,20 @@
 #!/usr/bin/python3
-"""
-Contains the number_of_subscribers function
-"""
-
+"""DOC"""
 import requests
 
 
 def number_of_subscribers(subreddit):
-    """returns the number of subscribers for a given subreddit"""
-    if subreddit is None or not isinstance(subreddit, str):
-        return 0
-    r = requests.get(
-        'http://www.reddit.com/r/{}/about.json'.format(subreddit),
-        headers={
-            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-                          "AppleWebKit/537.36 (KHTML, like Gecko) "
-                          "Chrome/126.0.0.0 Safari/537.36"
-        }).json()
-    subs = r.get("data", {}).get("subscribers", 0)
-    return subs
+    """DOC"""
+    reddit_url = "https://www.reddit.com/r/{}/about.json" \
+        .format(subreddit)
+
+    header = {'User-agent': 'Mozilla/5.0'}
+    response = requests.get(reddit_url,
+                            headers=header
+                            )
+
+    if response.status_code == 200:
+        data = response.json()['data']
+        subs = data['subscribers']
+        return subs
+    return 0
