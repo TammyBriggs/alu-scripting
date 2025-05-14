@@ -55,7 +55,7 @@ To clone this repository and start using the scripts:
 
 2. Run the following command:
    ```
-   git clone https://github.com/lscblack/alu-scripting.git
+   git clone https://github.com/TammyBriggs/alu-scripting.git
    ```
 3. Run The Following command open script folder
     ```
